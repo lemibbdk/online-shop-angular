@@ -1,0 +1,105 @@
+<div class="site">
+  <div class="nav-group">
+    <nav class="navbar navbar-light navbar-expand-lg">
+      <a class="navbar-brand" routerLink="/" routerLinkActive="brand-active">Online Shop</a>
+      <button class="navbar-toggler"
+              type="button" data-toggle="collapse"
+              data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav w-100 d-flex">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="home" routerLinkActive="router-active">
+              <mat-icon>shop</mat-icon>
+              Shop
+            </a>
+          </li>
+          <li class="nav-item dropdown" *ngIf="authService.isLoggedIn()">
+            <a class="nav-link dropdown-toggle"
+               routerLink="profile"
+               routerLinkActive="router-active"
+               id="navbarDropdown"
+               role="button"
+               data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+              <mat-icon>person</mat-icon>
+              {{authService.userProfile?.name}}
+            </a>
+            <div class="dropdown-menu main-items-color" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item text-dark" routerLink="profile/shoppingHistory">Purchase history</a>
+              <a class="dropdown-item text-dark" routerLink="profile/wishlist">Wishlist</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item text-dark" routerLink="profile">Profile</a>
+            </div>
+          </li>
+          <li class="nav-item" *ngIf="authService.isLoggedIn() && authService.userProfile?.role === 'admin'">
+            <a class="nav-link" routerLink="/items/add" routerLinkActive="router-active">Add Item</a>
+          </li>
+          <!--      <li class="nav-item ml-lg-auto mr-lg-auto" *ngIf="authService.isLoggedIn()">-->
+          <!--        <a class="nav-link" routerLink="cart">Cart ({{authService.userProfile?.currentCart.items.length}})</a>-->
+          <!--      </li>-->
+          <li class="nav-item dropdown ml-lg-auto mr-lg-auto" *ngIf="authService.isLoggedIn()">
+            <a class="nav-link" routerLink="cart" routerLinkActive="router-active" id="navbarDropdown2" role="button" aria-haspopup="true">
+              <mat-icon>shopping_cart</mat-icon>
+              Cart ({{authService.currentCart?.items.length}})
+            </a>
+            <div class="dropdown-menu main-items-color" aria-labelledby="navbarDropdown2">
+              <div *ngIf="this.authService.currentCart?.items.length === 0" class="m-2">There is no item in cart</div>
+              <div class="dropdown-item d-flex flex-row justify-content-between align-items-center p-2"
+                   *ngFor="let el of this.authService.currentCart?.items; let i = index">
+                <div class="d-flex flex-row p-3">
+                  <div>
+                    <!--                  <img *ngIf="el.item?._id" src="http://localhost:3000/items/{{el?.item._id}}/picture" width="50" height="50" />-->
+                    <img *ngIf="el.item?._id" src="{{this.authService.baseUrl}}/items/{{el?.item._id}}/picture" width="50" height="50" />
+                  </div>
+                  <div class="ml-2">
+                    {{el.item.name}} {{el.item.shortDescription}}
+                  </div>
+                </div>
+                <button type="button" (click)="removeFromCart(i)" class="btn btn-light clear-btn d-flex justify-content-center align-items-center">
+                  <!--              <mat-icon>clear</mat-icon>-->
+                  <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+            <a class="nav-link" routerLink="signup" routerLinkActive="router-active">Signup</a>
+          </li>
+          <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+            <a class="nav-link" routerLink="login" routerLinkActive="router-active">Login</a>
+          </li>
+          <li class="nav-item ml-lg-auto logout-btn" *ngIf="authService.isLoggedIn()">
+            <a class="nav-link" routerLink="/" (click)="logout()">Logout</a>
+          </li>
+        </ul>
+        <!--    <form class="form-inline my-2 my-lg-0">-->
+        <!--      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
+        <!--      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
+        <!--    </form>-->
+      </div>
+    </nav>
+
+    <div class="search-nav">
+      <form class="search-form" (ngSubmit)="searchItems()">
+        <input class="p-3" type="text" id="searchField" (input)="onInput($event)" [matAutocomplete]="auto" placeholder="Type here to search items" />
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of searchOptions" [value]="option" (onSelectionChange)="searchItems()">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+        <button [disabled]="disableSearch" type="submit" class="btn ml-2 button-style">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="content">
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
+  </div>
+</div>

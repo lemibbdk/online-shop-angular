@@ -1,0 +1,83 @@
+.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}
+
+@media (min-width: 992px) {
+  .logout-btn {
+    background-color: unset !important;
+  }
+}
+
+.nav-group {
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+}
+
+nav {
+  background-color: #30362F;
+}
+nav a {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+nav a mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.nav-item a {
+  color: #f1d9d9;
+}
+.nav-item a:hover {
+  color: white;
+}
+
+.clear-btn {
+  width: 20px;
+  height: 20px;
+}
+.clear-btn mat-icon {
+  font-size: 17px;
+}
+
+.search-nav {
+  height: 70px;
+  /*background-color: #576255;*/
+  background-color: #A59132;
+}
+
+.search-form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.search-nav input {
+  width: 40%;
+  min-width: 200px;
+  height: 40px;
+}
+
+.brand-active {
+  color: white !important;
+}
+
+.site {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 140px;
+}

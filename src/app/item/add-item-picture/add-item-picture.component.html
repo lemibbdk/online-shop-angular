@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-content>
+    <img *ngIf="showPicture" src="http://localhost:3000/items/{{item._id}}/picture"/>
+    <mat-divider></mat-divider>
+    <p>{{item.name}}</p>
+    <p>{{item.price}}&euro;</p>
+  </mat-card-content>
+</mat-card>
+
+<div class="form-group">
+  <label for="picture"></label>
+  <input type="file" id="picture" (change)="handleFileInput($event)">
+  <button type="button" class="btn button-style" (click)="upload()">Add item picture</button>
+</div>
+

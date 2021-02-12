@@ -1,0 +1,36 @@
+.profile-card {
+  min-width: 370px;
+}
+
+mat-divider {
+  margin-bottom: 10px;
+}
+
+.little-image {
+  width: 100px;
+  height: 100px;
+}
+
+a {
+  text-decoration: none;
+}
+a mat-icon {
+  margin-right: 5px;
+}
+a i {
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+img {
+  cursor: pointer;
+}
+
+.item-name {
+  font-size: 20px;
+}
+
+.profile-header h5 {
+  color: #30362F !important;
+  text-align: center;
+}

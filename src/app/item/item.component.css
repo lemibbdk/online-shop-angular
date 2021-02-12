@@ -1,0 +1,30 @@
+.calc-price {
+  font-size: 30px;
+}
+
+.item-container {
+  /*background-color: #5BD9C6;*/
+}
+
+mat-divider {
+  position: unset !important;
+  margin-top: 20px;
+}
+
+.star {
+  font-size: 35px;
+  color: #e0e004;
+}
+
+h3 {
+  color: black !important;
+}
+
+.star {
+  font-size: 28px;
+  color: #e0e004;
+}
+
+a {
+  text-decoration: none;
+}

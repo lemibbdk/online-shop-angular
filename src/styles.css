@@ -1,0 +1,139 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~bootstrap/dist/css/bootstrap.css';
+/*@import "~primeicons/primeicons.css";*/
+/*@import "~primeng/resources/themes/md-light-indigo/theme.css";*/
+/*@import "~primeng/resources/primeng.min.css";*/
+
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #A59132;
+}
+
+mat-sidenav-container, mat-sidenav-content, mat-sidenav {
+  height: 100%;
+  min-height: 88vh;
+}
+
+mat-sidenav {
+  min-height: 400px !important;
+  margin-top: 150px !important;
+}
+
+mat-sidenav {
+  width: 250px;
+  background-color: #FFFBDB !important;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.mat-drawer-container {
+  background-color: #A59132;
+}
+
+mat-sidenav-content {
+  background-color: #A59132;
+}
+
+mat-card {
+  background-color: #FFFBDB !important;
+}
+
+.red-snackbar {
+  background-color: red;
+  color: white;
+  border: 2px solid #eee;
+}
+.red-snackbar button {
+  color: white;
+}
+
+.button-style {
+  background-color: #30362F;
+  color: #f1d9d9;
+}
+.button-style:hover {
+  background-color: #30362F;
+  color: white;
+}
+
+input, select {
+  background-color: #FFFBDB !important;
+}
+
+.mat-select-panel {
+  max-height: 350px !important;
+}
+
+.main-items-color {
+  background-color: #FFFBDB;
+}
+
+mat-option {
+  background-color: #FFFBDB !important;
+}
+
+.router-active {
+  color: orange !important;
+}
+
+.side-active {
+  color: #625834 !important;
+  font-weight: bold;
+}
+
+mat-checkbox-checked {
+  background: #30362F !important;
+}
+
+/*h1, h2, h3, h4, h5 {*/
+/*  color: #FFFBDB !important;*/
+/*}*/
+
+.mat-option.mat-active {
+  background: #f1d9d9 !important;
+}
+
+.mat-option:hover:not(.mat-option-disabled), .mat-option:focus:not(.mat-option-disabled) {
+  background: #f1d9d9 !important;
+}
+
+small {
+  font-weight: bold;
+}
+
+.custom-slider .ngx-slider .ngx-slider-selection {
+  background: #625834;
+}
+
+.custom-slider .ngx-slider .ngx-slider-pointer {
+  background: #625834;
+}
+
+.custom-slider .ngx-slider .ngx-slider-pointer.ngx-slider-active:after {
+  background: #A59132;
+}
+
+.pi.pi-star {
+  color: #e0e004!important;
+}
+
+.p-breadcrumb {
+  /*background-color: #FFFBDB !important;*/
+  background-color: unset !important;
+  border: none !important;
+}
+.p-breadcrumb ul li .p-menuitem-link .p-menuitem-text {
+  /*color: #f1d9d9 !important*/
+  color: #eeeeee !important;
+}
+
+.p-breadcrumb ul li .p-menuitem-link .p-menuitem-icon {
+  color: #f1d9d9 !important;
+}
+
+.not-avail {
+  background-color: #b5b5b5 !important;
+}

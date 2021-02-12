@@ -1,0 +1,42 @@
+.item-card {
+  margin: 20px;
+  padding: 20px;
+  width: 250px;
+  justify-content: space-between;
+}
+
+.item-card img {
+  width: 200px;
+  height: 200px;
+}
+
+mat-card:hover {
+  -webkit-box-shadow: 0px 0px 28px 3px rgba(78,87,76,1);
+  -moz-box-shadow: 0px 0px 28px 3px rgba(78,87,76,1);
+  box-shadow: 0px 0px 28px 3px rgba(78,87,76,1);
+}
+
+mat-card a {
+  text-decoration: none;
+}
+
+.listed-icon {
+  color: red;
+}
+
+img {
+  cursor: pointer;
+}
+
+.item-name {
+  font-size: 20px;
+}
+.item-name a {
+  /*color: #30362F;*/
+  font-weight: bold;
+}
+
+.star {
+  font-size: 22px;
+  color: #e0e004;
+}

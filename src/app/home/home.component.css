@@ -1,0 +1,53 @@
+.item-card {
+  margin: 20px;
+  padding: 20px;
+  width: 250px;
+  justify-content: space-between;
+  height: auto;
+}
+
+.item-card img {
+  width: 200px;
+  height: 200px;
+}
+
+ul {
+  display: flex;
+  list-style: ">";
+}
+
+li {
+  margin-left: 15px;
+  padding-left: 5px
+}
+
+a {
+  text-decoration: none;
+}
+
+mat-paginator {
+  background-color: #FFFBDB;
+}
+
+.sub-cats mat-card {
+  cursor: pointer;
+  width: 400px;
+  margin: 20px;
+}
+
+.info-icon {
+  width: 70px;
+  height: 70px;
+  margin: 10px;
+}
+
+.info-icon mat-icon {
+  color: orange;
+  font-size: 40px;
+  width: unset;
+  height: unset;
+}
+
+.information {
+  border-radius: 10px;
+}

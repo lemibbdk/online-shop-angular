@@ -1,0 +1,173 @@
+<mat-sidenav-container>
+  <mat-sidenav mode="side" fixedInViewport opened fxHide.lt-md>
+    <mat-nav-list class="pl-4">
+      <a mat-list-item routerLink="/profile" routerLinkActive="side-active" [routerLinkActiveOptions]="{exact:true}" >
+        <mat-icon>person</mat-icon>
+        Profile
+      </a>
+      <a mat-list-item routerLink="/profile/wishlist" routerLinkActive="side-active">
+        <i class="fas fa-heart" aria-hidden="true"></i>
+        Wishlist
+      </a>
+      <a mat-list-item routerLink="/profile/shoppingHistory" routerLinkActive="side-active">
+        <mat-icon>history</mat-icon>
+        Shopping History
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="d-flex flex-column">
+    <div class="p-4">
+      <div *ngIf="contentToLoad === 'profile'" class="d-flex justify-content-center">
+        <div class="card profile-card w-50 p-4 main-items-color" *ngIf="!editingProfile">
+          <div class="profile-header"><h5>User data</h5></div>
+          <div class="card-body">
+            <div fxLayout="column">
+              <label>Name:</label> <b>{{authService.userProfile?.name}}</b>
+              <mat-divider></mat-divider>
+              <label>Email: </label> <b>{{authService.userProfile?.email}}</b>
+              <mat-divider></mat-divider>
+              <label>Phone </label> <b>{{authService.userProfile?.phone}}</b>
+              <mat-divider></mat-divider>
+              <label>Address: </label> <b>{{authService.userProfile?.address}}</b>
+              <mat-divider></mat-divider>
+              <label>Place: </label> <b>{{authService.userProfile?.place}}</b>
+              <mat-divider></mat-divider>
+              <label>Role: </label> <b>{{authService.userProfile?.role}}</b>
+              <mat-divider></mat-divider>
+            </div>
+            <div>
+              <button type="button" class="btn button-style" (click)="editingProfile = true">Change data</button>
+            </div>
+          </div>
+        </div>
+
+        <app-signup *ngIf="editingProfile" [toEditUser]="toEditUser" (newItemEvent)="editFinishedEvent()"></app-signup>
+      </div>
+
+      <div *ngIf="contentToLoad === 'wishlist'">
+        <app-list-item [items]="authService?.wishList"></app-list-item>
+      </div>
+
+      <div *ngIf="contentToLoad === 'shoppingHistory'" class="d-flex justify-content-center" fxLayout="row wrap">
+        <div class="w-75" *ngIf="!editingCart">
+          <mat-card *ngFor="let el of shoppingHistory; let i = index" class="mt-4" [ngClass]="{'not-avail': el.status === 'canceled'}">
+            <mat-card-content>
+              <div *ngFor="let cartItem of el.items; let j = index" class="m-2">
+                <div class="d-flex flex-row align-items-center p-2">
+<!--                  <img class="little-image" src="http://localhost:3000/items/{{cartItem?.item._id}}/picture"-->
+<!--                       routerLink="/items/all/{{cartItem.item?._id}}" alt="{{cartItem?.item.name}}"/>-->
+                  <img class="little-image" src="{{this.authService.baseUrl}}/items/{{cartItem?.item._id}}/picture"
+                       routerLink="/items/all/{{cartItem.item?._id}}" alt="{{cartItem?.item.name}}"/>
+                  <div class="d-flex flex-column w-25 ml-4">
+                    <span class="item-name"><a routerLink="/items/all/{{cartItem.item._id}}"> {{ cartItem.item.name }} </a></span>
+                    <span>{{cartItem.item.shortDescription}}</span>
+                  </div>
+                  <div class="d-flex flex-column align-items-center pl-2">
+                    <span><strong>Price then:</strong></span>
+                    <span>{{cartItem.currentPrice}}</span>
+                  </div>
+
+                  <div class="d-flex flex-column align-items-center pl-2">
+                    <span><strong>Discount then:</strong></span>
+                    <span>{{cartItem.currentDiscount}}%</span>
+                  </div>
+                  <div class="d-flex flex-column align-items-center pl-2">
+                    <span><strong>Quantity:</strong></span>
+                    <span>{{cartItem.quantity}}</span>
+                  </div>
+                  <div class="d-flex flex-column align-items-center ml-auto mr-auto">
+                    <span><strong>Calculated:</strong></span>
+                    <span>{{cartItem.calculatedPrice}} &euro;</span>
+                  </div>
+                  <div *ngIf="el.status === 'confirmed' && !showReviewForm && !itemReviewed(cartItem)">
+                    <button (click)="reviewItem(cartItem.item, i, j)" class="btn button-style">Review</button>
+                  </div>
+                  <div class="d-none" id="form-{{i}}-item{{j}}">
+                    <form class="d-flex flex-column justify-content-center align-items-center m-2" [formGroup]="reviewForm" (ngSubmit)="onSubmit(i, j)">
+                      <mat-form-field>
+                        <label for="review">Review:</label>
+                        <textarea matInput type="text" id="review" formControlName="review"></textarea>
+                      </mat-form-field>
+<!--                      <mat-form-field>-->
+<!--                        <label for="evaluation">Select evaluation:</label>-->
+<!--                        <mat-select id="evaluation" formControlName="evaluation">-->
+<!--                          <mat-option *ngFor="let el of evaluationOptions" value="{{el}}">{{el}}</mat-option>-->
+<!--                        </mat-select>-->
+<!--                      </mat-form-field>-->
+                      <div>
+                        <h5>Your rating:</h5>
+                        <p-rating formControlName="evaluation" [cancel]="false"></p-rating>
+                      </div>
+                      <span class="text-danger mb-2" *ngIf="reviewForm.invalid">Fill out fields to submit</span>
+                      <div class="form-group">
+                        <button type="submit" class="btn button-style" [disabled]="reviewForm.invalid">Submit</button>
+                        <button type="button" class="btn btn-danger ml-2" (click)="cancelReview(i, j)">Cancel</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <mat-divider class="mb-2"></mat-divider>
+              </div>
+              <div class="d-flex flex-row justify-content-between mt-4">
+                <mat-card-subtitle class="mt-2">Purchased: {{el.createdAt | date}}</mat-card-subtitle>
+                <mat-card-title class="text-right">Overall price: <strong>{{el.overAllPrice.toFixed(2)}} &euro;</strong></mat-card-title>
+              </div>
+            </mat-card-content>
+            <mat-card-actions class="p-2" *ngIf="!(el?.status === 'confirmed' || el?.status === 'canceled')">
+              <button (click)="confirmReceived(el)" class="btn button-style">Confirm received</button>
+              <button (click)="editOrder(el); this.backUpCart = el" class="btn btn-primary ml-2">Edit</button>
+              <button class="btn btn-danger ml-2" (click)="cancelOrder(el)">Cancel order</button>
+            </mat-card-actions>
+            <span> <strong>Status:</strong>
+              <i> {{el.status === 'confirmed' ? 'Confirmed received': el.status === 'progress' ? 'In progress' : 'Order is canceled'}}</i>
+            </span>
+          </mat-card>
+        </div>
+        <div *ngIf="editingCart">
+          <h3 class="text-center mb-3">Edit cart</h3>
+          <mat-card>
+            <mat-card-content>
+              <div *ngFor="let cartItem of cart?.items; let j = index" class="m-2">
+                <div class="d-flex flex-row align-items-center p-2">
+                  <img class="little-image" src="{{this.authService.baseUrl}}/items/{{cartItem?.item._id}}/picture"
+                       routerLink="/items/all/{{cartItem.item?._id}}" alt="{{cartItem?.item.name}}"/>
+                  <div class="d-flex flex-column w-25 ml-4">
+                    <span class="item-name"><a routerLink="/items/all/{{cartItem.item._id}}"> {{ cartItem.item.name }} </a></span>
+                    <span>{{cartItem.item.shortDescription}}</span>
+                  </div>
+                  <div class="d-flex flex-column align-items-center pl-2">
+                    <span><strong>Price:</strong></span>
+                    <span>{{cartItem.currentPrice}}</span>
+                  </div>
+
+                  <div class="d-flex flex-column align-items-center pl-2">
+                    <span><strong>Discount:</strong></span>
+                    <span>{{cartItem.currentDiscount}}%</span>
+                  </div>
+                  <div class="mt-3 p-2 d-flex flex-column align-items-center w-25">
+                    <h5>Change quantity:</h5>
+                    <mat-select class="w-50 m-3" value="{{cartItem.quantity}}" (selectionChange)="updatePrices($event, j)">
+                      <mat-option *ngFor="let i of toArrayFunction(cartItem.item.remaining);" value="{{i}}">{{i}}</mat-option>
+                    </mat-select>
+                  </div>
+                  <div class="d-flex flex-column align-items-center ml-auto mr-auto">
+                    <span><strong>Calculated:</strong></span>
+                    <span>{{cartItem.calculatedPrice}} &euro;</span>
+                  </div>
+                </div>
+                <mat-divider class="mb-2"></mat-divider>
+              </div>
+              <div class="d-flex flex-row justify-content-between mt-4">
+                <mat-card-title class="text-right">Overall price: <strong>{{cart.overAllPrice.toFixed(2)}} &euro;</strong></mat-card-title>
+              </div>
+            </mat-card-content>
+            <mat-card-actions class="p-2">
+              <button (click)="finishEditingOrder()" class="btn btn-primary ml-2" [disabled]="disableEditingCart">Confirm</button>
+              <button class="btn btn-danger ml-2" (click)="cancelEditingOrder()" [disabled]="!disableEditingCart">Cancel edit</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

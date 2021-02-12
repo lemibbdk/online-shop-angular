@@ -1,0 +1,32 @@
+<div class="container w-25 mt-4">
+  <h2 class="text-center">Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="card main-items-color p-4 mt-2">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" formControlName="email" placeholder="Enter email">
+        <small class="text-danger"
+               *ngIf="loginForm.get('email').hasError('email') &&
+                 !loginForm.get('email').hasError('required') && loginForm.get('email').touched" >
+          Please insert email in correct format
+        </small>
+        <small class="text-danger" *ngIf="loginForm.get('email').hasError('required') && loginForm.get('email').touched">
+          Email is required
+        </small>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
+        <small class="text-danger" *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched">
+          Password is required
+        </small>
+        <small class="text-danger" *ngIf="loginForm.get('password').hasError('minlength') && loginForm.get('password').touched">
+          Password minimum length is 8
+        </small>
+      </div>
+      <div class="w-100 d-flex justify-content-center">
+        <button type="submit" class="btn button-style" [disabled]="loginForm.invalid">Submit</button>
+      </div>
+    </div>
+  </form>
+</div>

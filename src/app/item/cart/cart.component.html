@@ -1,0 +1,86 @@
+<div class="container-fluid" fxLayout="row wrap">
+  <div *ngIf="authService.currentCart?.items.length === 0" class="card w-100 main-items-color">
+    <h5 class="card-header text-center">You don't have any item in cart</h5>
+  </div>
+  <mat-vertical-stepper class="w-100 main-items-color" linear #stepper>
+
+    <mat-step [editable]="!purchaseSuccess" [completed]="authService.currentCart?.items.length !== 0 || purchaseReview">
+      <ng-template matStepLabel>Check your order</ng-template>
+      <div class="d-flex flex-row">
+        <div class="w-75">
+          <mat-card *ngFor="let el of authService.currentCart?.items; let i = index;" class="d-flex flex-row">
+            <div>
+<!--              <img src="http://localhost:3000/items/{{el?.item._id}}/picture"/>-->
+              <img src="{{this.authService.baseUrl}}/items/{{el?.item._id}}/picture"/>
+            </div>
+            <div class="w-100 ml-2 d-flex flex-column justify-content-between">
+              <div class="w-100 d-flex flex-row justify-content-between">
+                <div>
+                  <h4>{{el.item.name}} </h4>
+                  <span *ngFor="let property of el.item.properties"> {{property.value}}</span>
+                </div>
+                <div>
+                  <button (click)="deleteItemFromCart(i)" mat-icon-button color="warn" matTooltip="Remove from cart">
+                    <mat-icon>
+                      delete
+                    </mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="w-100 d-flex flex-column align-items-center mt-3">
+                <span> Price: {{el.quantity}} * {{ el.item.price }} &euro;</span>
+                <span *ngIf="el.item.discount !== 0"> Discount: {{ el.currentDiscount }} %</span>
+                <span class="calc-price"> {{ el?.calculatedPrice.toFixed(2) }} &euro;</span>
+                <div class="mt-3 p-2 d-flex align-items-center w-25">
+                  <button mat-icon-button (click)="decrease(el, i)" [disabled]="el.quantity == 1" matTooltip="Increase quantity">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+<!--                  <span>{{el.quantity}}</span>-->
+                  <mat-select class="w-50 m-3" value="{{el.quantity}}" (selectionChange)="updatePrices($event, i)">
+                    <mat-option *ngFor="let i of toArrayFunction(el.item.remaining);" value="{{i}}">{{i}}</mat-option>
+                  </mat-select>
+                  <button mat-icon-button (click)="increase(el, i)" [disabled]="el.quantity === el.item.remaining" matTooltip="Increase quantity">
+                    <mat-icon>
+                      add
+                    </mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div>
+                <mat-card-subtitle class="text-center">Remaining: {{ el.item.remaining }}</mat-card-subtitle>
+                <mat-card-subtitle class="text-center">Located in: {{ el.item.locatedIn }}</mat-card-subtitle>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+          <mat-card class="price">
+            <mat-card-content>Overall: </mat-card-content>
+            <mat-card-header><strong>{{authService.currentCart?.overAllPrice.toFixed(2)}} &euro; </strong></mat-card-header>
+          </mat-card>
+        </div>
+      </div>
+      <div>
+        <button class="mt-2" mat-raised-button matStepperNext [disabled]="authService.currentCart?.items.length === 0">Next</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="confirmationControl" errorMessage="Confirmation is required"
+              [editable]="!purchaseSuccess">
+      <ng-template matStepLabel>Info & confirm</ng-template>
+      <p *ngIf="!!placesNotMatched">You have chosen a product that is located in a different location of living place.
+        Because of that, estimated delivery time is 3 to 5 days. If you pick all products which is located on your
+        living place, delivery time will be one day.</p>
+      <p *ngIf="!placesNotMatched">Estimated delivery time is 1 day. This is because you chosen all products which is
+        located on same place where is your living address. Estimated delivery time is as short as possible.</p>
+      <mat-checkbox [formControl]="confirmationControl">I agree terms</mat-checkbox>
+      <div>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button mat-raised-button matStepperNext (click)="proceed()" [disabled]="confirmationControl.invalid">Next</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Order review</ng-template>
+      <div>Succeed!</div>
+    </mat-step>
+  </mat-vertical-stepper>
+</div>

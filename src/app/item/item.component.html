@@ -1,0 +1,88 @@
+<div *ngIf="!authService.isLoggedIn()">
+  <h1 class="text-center">Please <a routerLink="/signup">signup</a> or <a routerLink="/login">login</a> to proceed</h1>
+</div>
+
+<div class="container mt-3 item-container" *ngIf="authService.isLoggedIn()">
+  <mat-card *ngIf="item" class="d-flex flex-row justify-content-around">
+    <div class="d-flex flex-column justify-content-between">
+<!--      <img src="http://localhost:3000/items/{{item?._id}}/picture" alt="item picture"/>-->
+      <img src="{{this.authService.baseUrl}}/items/{{item?._id}}/picture" alt="item picture"/>
+      <div class="d-flex flex-column justify-content-center align-items-center mt-2">
+        <span>Rating:</span>
+        <div class="d-flex flex-row justify-content-center">
+<!--          <i class="fas fa-star star"></i>-->
+          <h2 *ngIf="item?.reviews.length > 0">{{item?.totalEvaluation}}</h2>
+          <span *ngIf="item?.reviews.length === 0">No evaluation</span>
+        </div>
+        <div>
+          <p-rating [ngModel]="item?.totalEvaluation" [readonly]="true" [cancel]="false"></p-rating>
+        </div>
+        <mat-card-subtitle *ngIf="item?.reviews.length > 0">
+          {{item?.reviews.length}} {{item?.reviews.length == 1 ? 'review' : 'reviews'}}
+        </mat-card-subtitle>
+      </div>
+    </div>
+    <div class="d-flex flex-column justify-content-around">
+      <div>
+        <h3>{{ item.name }}</h3>
+        <span>{{ item.shortDescription }}</span>
+      </div>
+      <div *ngFor="let el of item.properties">
+        <span> <b> {{ el.property }} : </b> </span>
+        <span>{{ el.value }}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="mt-2 d-flex flex-row justify-content-between">
+        <div class="w-75 mt-2 d-flex flex-column">
+          <span><strong>Country origin:</strong> {{item.countryOrigin}}</span>
+          <span><strong>Seller:</strong> {{item.seller}}</span>
+          <span><strong>Located in: </strong> {{item.locatedIn}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-column justify-content-between p-3">
+      <span> Price: {{selectedQuantity}} * {{ item.price }} &euro;</span>
+      <span *ngIf="item.discount !== 0"> Discount: {{ item.discount }} %</span>
+      <span class="calc-price">
+        {{ item.discount !== 0 ? (calculatedPrice * selectedQuantity).toFixed(2) : (item.price * selectedQuantity).toFixed(2) }} &euro;
+      </span>
+      <div>
+        <button type="button" class="btn button-style w-100" (click)="addToCart()" [disabled]="itemInCartCheck() || !item.available">
+          <span *ngIf="!itemInCartCheck()">Add to cart</span>
+          <span *ngIf="itemInCartCheck()">Item is in cart</span>
+        </button>
+        <div class="p-2 form-group">
+          <label for="quantity">Select quantity</label>
+          <mat-select id="quantity" [(value)]="selectedQuantity" [disabled]="itemInCartCheck()">
+            <mat-option *ngFor="let el of quantity" value="{{el}}">{{el}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-end">
+        <mat-card-subtitle class="m-0">{{item.available ? 'Available' : 'Not available'}}: {{item.remaining}}</mat-card-subtitle>
+      </div>
+    </div>
+  </mat-card>
+
+  <div>
+    <h3 class="mt-5" *ngIf="item?.reviews.length > 0">Ratings and reviews</h3>
+    <h3 class="mt-5" *ngIf="item?.reviews.length === 0">There is no rating or review for this item</h3>
+    <div>
+      <mat-card class="d-flex flex-row w-25" *ngFor="let review of item?.reviews">
+        <div>
+          <div class="d-flex">
+            <i class="fas fa-star star"></i>
+            <h3 class="text-center">{{review.evaluation}}</h3>
+          </div>
+          <span>{{review.name.split(' ')[0]}}</span>
+          <mat-card-subtitle class="mt-1">
+            {{review.createdAt | date}}
+          </mat-card-subtitle>
+        </div>
+        <mat-card-content>
+          <p>{{review.review}}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

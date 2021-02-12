@@ -1,0 +1,152 @@
+<div class="container w-25 mt-4 mb-4 cont-min-width" *ngIf="!itemUploaded">
+  <h2 class="text-center">Item</h2>
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" formControlName="name" placeholder="Enter name">
+      <small class="text-danger" *ngIf="itemForm.get('name').hasError('required') && itemForm.get('name').touched">
+        Name is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('name').hasError('minlength') && itemForm.get('name').touched">-->
+      <!--        Name minimum length is 3-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input type="text" class="form-control" id="price" formControlName="price" placeholder="Enter price">
+      <small class="text-danger" *ngIf="itemForm.get('price').hasError('required') && itemForm.get('price').touched">
+        Price is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('price').hasError('minlength') && itemForm.get('price').touched">-->
+      <!--        Name minimum length is 3-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="discount">Discount</label>
+      <input type="text" class="form-control" id="discount" formControlName="discount" placeholder="Enter discount">
+      <small class="text-danger" *ngIf="itemForm.get('discount').hasError('required') && itemForm.get('discount').touched">
+        Discount is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('discount').hasError('minlength') && itemForm.get('discount').touched">-->
+      <!--        Discount minimum length is 8-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input type="text" class="form-control" id="category" formControlName="category" placeholder="Enter category">
+      <small class="text-danger" *ngIf="itemForm.get('category').hasError('required') && itemForm.get('category').touched">
+        Category is required
+      </small>
+      <small class="text-danger" *ngIf="itemForm.get('category').hasError('minlength') && itemForm.get('category').touched">
+        Category minimum length is 11
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('category').hasError('pattern') && itemForm.get('category').touched">-->
+      <!--        Only numbers are allowed on this field-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="subCategory">Sub category</label>
+      <input type="text" class="form-control" id="subCategory" formControlName="subCategory" placeholder="Enter sub category">
+      <small class="text-danger" *ngIf="itemForm.get('subCategory').hasError('required') && itemForm.get('subCategory').touched">
+        Sub category is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('subCategory').hasError('minlength') && itemForm.get('subCategory').touched">-->
+      <!--        Sub category minimum length error-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="shortDescription">Short description</label>
+      <input type="text" class="form-control" id="shortDescription" formControlName="shortDescription" placeholder="Enter short description">
+      <small class="text-danger" *ngIf="itemForm.get('shortDescription').hasError('required') && itemForm.get('shortDescription').touched">
+        Sub category is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('shortDescription').hasError('minlength') && itemForm.get('shortDescription').touched">-->
+      <!--        Short description minimum length error-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="remaining">Remaining</label>
+      <input type="text" class="form-control" id="remaining" formControlName="remaining" placeholder="Enter remaining of items">
+      <small class="text-danger" *ngIf="itemForm.get('remaining').hasError('required') && itemForm.get('remaining').touched">
+        Remaining is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('remaining').hasError('minlength') && itemForm.get('remaining').touched">-->
+      <!--        Remaining minimum length error-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="seller">Seller</label>
+      <input type="text" class="form-control" id="seller" formControlName="seller" placeholder="Enter seller of item">
+      <small class="text-danger" *ngIf="itemForm.get('seller').hasError('required') && itemForm.get('seller').touched">
+        Seller is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('seller').hasError('minlength') && itemForm.get('seller').touched">-->
+      <!--        Seller minimum length error-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="countryOrigin">Country origin</label>
+      <input type="text" class="form-control" id="countryOrigin" formControlName="countryOrigin" placeholder="Enter country origin of item">
+      <small class="text-danger" *ngIf="itemForm.get('countryOrigin').hasError('required') && itemForm.get('countryOrigin').touched">
+        Country origin is required
+      </small>
+      <!--      <small class="text-danger" *ngIf="itemForm.get('countryOrigin').hasError('minlength') && itemForm.get('countryOrigin').touched">-->
+      <!--        Country origin minimum length error-->
+      <!--      </small>-->
+    </div>
+
+    <div class="form-group">
+      <label for="locatedIn">Located in</label>
+      <select id="locatedIn" class="form-control" formControlName="locatedIn">
+        <option value="">Select location of item</option>
+        <option *ngFor="let city of cities" [ngValue]="city">{{city}}</option>
+      </select>
+      <small class="text-danger" *ngIf="locatedIn.errors?.required && locatedIn.touched">
+        Location is required
+      </small>
+    </div>
+
+    <div>
+      <div *ngFor="let prop of propertiesFormGroups; let i = index" class="list-group list-group-flush">
+        <div [formGroup]="prop" class="card main-items-color p-4 mt-2">
+          <div class="form-group main-items-color">
+            <label for="property">Property {{i + 1}}</label>
+            <input type="text" class="form-control" id="property" formControlName="property" placeholder="Enter property" />
+            <small class="text-danger" *ngIf="prop.controls.property.hasError('required') && prop.controls.property.touched">
+              Property is required
+            </small>
+          </div>
+          <div class="form-group main-items-color">
+            <label for="value">Value {{i + 1}}</label>
+            <input type="text" class="form-control" id="value" formControlName="value" placeholder="Enter value" />
+            <small class="text-danger" *ngIf="prop.controls.value.hasError('required') && prop.controls.value.touched">
+              Value is required
+            </small>
+          </div>
+          <button type="button" class="button-style" (click)="removeProperty(i)">Remove property</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <h5 class="text-center">Add item properties</h5>
+        <button type="button" class="button-style" (click)="addProperty($event)">Add property</button>
+      </div>
+    </div>
+
+    <div class="w-100 d-flex justify-content-center">
+      <button type="submit" class="btn button-style" [disabled]="itemForm.invalid">Submit</button>
+    </div>
+    <label class="w-100 text-center mt-3" *ngIf="itemForm.invalid">Please fill in all fields</label>
+  </form>
+</div>
+
+<div class="container w-25 mt-4 mb-4 cont-min-width" *ngIf="itemUploaded">
+  <app-add-item-picture [item]="item"></app-add-item-picture>
+</div>

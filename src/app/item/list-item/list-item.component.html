@@ -1,0 +1,57 @@
+<div fxLayout="row wrap" fxLayoutAlign="center">
+  <mat-card *ngFor="let item of items, let i = index" class="item-card" [ngClass]="{'not-avail': !item.available}" fxLayout="column">
+    <div class="w-100 d-flex justify-content-end align-items-center">
+      <div [fxShow]="item.reviews?.length > 0" class="mr-auto">
+        <i class="fas fa-star star"></i>
+        <span class="ml-2">{{item.totalEvaluation}}</span>
+      </div>
+      <button type="button" class="btn"
+              (click)="addToWishlist(item._id)"
+              *ngIf="!itemIsInList(item._id) && authService.isLoggedIn()"
+              matTooltip="Add to wishlist">
+        <i class="far fa-heart" aria-hidden="true"></i>
+      </button>
+      <button type="button" class="btn"
+              (click)="removeFromWishlist(item._id)"
+              *ngIf="itemIsInList(item._id) && authService.isLoggedIn()"
+              matTooltip="Remove from wishlist">
+        <i class="fa fa-heart listed-icon" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="w-100 d-flex justify-content-center">
+<!--      <img src="http://localhost:3000/items/{{item?._id}}/picture" routerLink="/items/all/{{item?._id}}"/>-->
+      <img src="{{this.authService.baseUrl}}/items/{{item?._id}}/picture" routerLink="/items/all/{{item?._id}}"/>
+    </div>
+    <mat-card-content fxLayout="column">
+      <span class="item-name"> <a routerLink="/items/all/{{item._id}}"> {{ item.name }} </a> </span>
+      <span> {{ item.shortDescription }} </span>
+      <span *ngIf="authService.isLoggedIn()"> Time to delivery: <strong> {{item.locatedIn === authService.userProfile.place ? '1 Day' : '3-5 days'}} </strong> </span>
+    </mat-card-content>
+    <mat-card-subtitle class="text-center d-flex flex-column" *ngIf="item.discount !== 0">
+      <span>{{item.price}}&euro;</span>
+      <span>-{{item.discount}}% discount</span>
+    </mat-card-subtitle>
+    <mat-card-title class="text-center">
+      {{ item.discount !== 0 ? (item.price - (item.price * item.discount / 100)).toFixed(2) : item.price }}&euro;
+    </mat-card-title>
+    <mat-card-subtitle class="text-center d-flex flex-column">
+      <span><strong>{{ item.available ? 'Available' : 'Not available' }}</strong> </span>
+      <span> Remaining: {{ item.remaining }} </span>
+      <span *ngIf="item.available"> Located in {{item.locatedIn}} </span>
+    </mat-card-subtitle>
+    <mat-card-actions class="d-flex justify-content-between">
+      <button type="button" *ngIf="authService.userProfile?.role === 'admin'"
+              class="btn button-style d-flex justify-content-center"
+              [routerLink]="['/items/all', item._id, 'edit']"
+              matTooltip="Edit item">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button type="button" *ngIf="authService.userProfile?.role === 'admin'"
+              class="btn btn-danger d-flex justify-content-center"
+              matTooltip="Delete item"
+              (click)="deleteItem(item._id, i)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
