@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../auth.service';
 import {Cart} from '../../item/cart';
@@ -15,7 +15,7 @@ import {RatingModule} from 'primeng/rating';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   contentToLoad = 'profile';
 
@@ -41,8 +41,7 @@ export class ProfileComponent implements OnInit {
   editingCart = false;
 
   cart: Cart;
-  backUpCart: Cart;
-
+  backUpCart: any;
   disableEditingCart = true;
 
   editFinishedEvent(): void {
@@ -53,6 +52,7 @@ export class ProfileComponent implements OnInit {
               private itemService: ItemService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.backUpCart = {};
     const routePath = this.route.snapshot.routeConfig.path;
 
     if (routePath.split('/')[1] === undefined) {
@@ -62,6 +62,14 @@ export class ProfileComponent implements OnInit {
     }
 
     this.readCarts();
+
+    const currentPage = this.route.snapshot.routeConfig.path.split('/')[1];
+
+    if (currentPage !== 'shoppingHistory'){
+      if (this.cart) {
+        this.resetCart();
+      }
+    }
 
   }
 
@@ -83,11 +91,9 @@ export class ProfileComponent implements OnInit {
 
       this.itemService.updateItem(item._id, {remaining: item.remaining}).subscribe({
         next: value => {
-          console.log(value);
-
           if (i === cart.items.length - 1) {
             this.cartService.updateCart(cart._id, {status: 'confirmed'}).subscribe({
-              next: value => {
+              next: value1 => {
                 this.readCarts();
               },
               error: err => {
@@ -139,7 +145,6 @@ export class ProfileComponent implements OnInit {
   cancelOrder(el): void {
     this.cartService.updateCart(el._id, {status: 'canceled'}).subscribe({
       next: value1 => {
-        console.log(value1);
         this.readCarts();
         const message = 'You have successfully canceled your order!';
         this.snackBar.open(message, 'close', {duration: 4000});
@@ -152,13 +157,14 @@ export class ProfileComponent implements OnInit {
 
   editOrder(el): void {
     this.editingCart = true;
+    this.disableEditingCart = true;
     this.cart = el;
-    // console.log(this.backUpCart.items[0].quantity);
-    console.log('usao mrvak');
+    this.backUpCart = JSON.parse(JSON.stringify(el.items));
   }
 
   cancelEditingOrder(): void {
     this.editingCart = false;
+    this.resetCart();
   }
 
   toArrayFunction(num): any {
@@ -167,8 +173,8 @@ export class ProfileComponent implements OnInit {
 
   updatePrices(e, i): void {
     this.disableEditingCart = false;
+
     this.cart.items[i].quantity = Number(e.value);
-    console.log(this.backUpCart.items[i].quantity);
     this.cartService.updateCart(this.cart._id, {items: this.cart.items}).subscribe({
       next: value => {
         this.cart = value;
@@ -184,6 +190,23 @@ export class ProfileComponent implements OnInit {
 
     const message = 'Successfully edited cart';
     this.snackBar.open(message, 'close', {duration: 2000});
+  }
+
+  resetCart(): void {
+    this.cartService.updateCart(this.cart._id, {items: this.backUpCart}).subscribe({
+      next: value => {
+        this.readCarts();
+      },
+      error: err => {
+        console.log(err);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.cart) {
+      this.resetCart();
+    }
   }
 
 }

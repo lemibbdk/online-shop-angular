@@ -115,7 +115,7 @@
             </mat-card-content>
             <mat-card-actions class="p-2" *ngIf="!(el?.status === 'confirmed' || el?.status === 'canceled')">
               <button (click)="confirmReceived(el)" class="btn button-style">Confirm received</button>
-              <button (click)="editOrder(el); this.backUpCart = el" class="btn btn-primary ml-2">Edit</button>
+              <button (click)="editOrder(el)" class="btn btn-primary ml-2">Edit</button>
               <button class="btn btn-danger ml-2" (click)="cancelOrder(el)">Cancel order</button>
             </mat-card-actions>
             <span> <strong>Status:</strong>
@@ -163,7 +163,7 @@
             </mat-card-content>
             <mat-card-actions class="p-2">
               <button (click)="finishEditingOrder()" class="btn btn-primary ml-2" [disabled]="disableEditingCart">Confirm</button>
-              <button class="btn btn-danger ml-2" (click)="cancelEditingOrder()" [disabled]="!disableEditingCart">Cancel edit</button>
+              <button class="btn btn-danger ml-2" (click)="cancelEditingOrder()">Cancel edit</button>
             </mat-card-actions>
           </mat-card>
         </div>

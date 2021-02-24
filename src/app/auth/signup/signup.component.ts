@@ -51,8 +51,7 @@ export class SignupComponent implements OnInit {
   @Output()
   newItemEvent = new EventEmitter<string>();
 
-  constructor(private userService: UserService, private authService: AuthService, private snackBar: MatSnackBar, private router: Router,
-              private cartService: CartService) { }
+  constructor(private userService: UserService, private authService: AuthService, private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
     if (this.toEditUser) {
@@ -75,7 +74,6 @@ export class SignupComponent implements OnInit {
       delete dataToSend.role;
       dataToSend.role = this.signupForm.get('role').value ? 'admin' : 'user';
 
-      console.log(this.signupForm.value);
       this.userService.updateUser(dataToSend).subscribe({
         next: data => {
           delete data.currentCart;

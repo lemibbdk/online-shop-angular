@@ -65,7 +65,6 @@ export class AddItemComponent implements OnInit {
     if (this.itemId) {
       this.itemService.readItem(this.itemId).subscribe({
         next: data => {
-          console.log(data);
           Object.keys(data).forEach(name => {
             if (this.itemForm.controls[name]) {
               this.itemForm.controls[name].patchValue(data[name]);
@@ -92,7 +91,7 @@ export class AddItemComponent implements OnInit {
   get t(): any { return this.f.properties as FormArray; }
   get propertiesFormGroups(): FormGroup[] { return this.t.controls as FormGroup[]; }
 
-  addProperty(e): void {
+  addProperty(): void {
     this.t.push(this.fb.group({
       property: ['', Validators.required],
       value: ['', Validators.required]

@@ -1,13 +1,10 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthService} from './auth/auth.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute, Router} from '@angular/router';
 import {CartService} from './item/cart.service';
-import {UserService} from './auth/user.service';
 import {ItemService} from './item/item.service';
 import {Item} from './item/item';
-import {logger} from 'codelyzer/util/logger';
-import {ListItemComponent} from './item/list-item/list-item.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -74,7 +71,7 @@ export class AppComponent {
         error: err => {
           console.log(err);
         }
-      })
+      });
     }
   }
 
@@ -86,7 +83,7 @@ export class AppComponent {
     values.forEach((val, i) => {
       paramValues += 'key-' + val;
     });
-    console.log(paramValues);
+
     this.router.navigate(['/search/' + paramValues]);
 
 

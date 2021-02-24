@@ -32,7 +32,6 @@ export class AddItemPictureComponent implements OnInit {
 
     this.itemService.uploadItemPicture(this.item._id, formData).subscribe({
       next: data => {
-        console.log(data);
         this.showPicture = true;
       },
       error: err => {
